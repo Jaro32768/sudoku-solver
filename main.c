@@ -3,8 +3,8 @@
 #include <stdbool.h>
 
 typedef struct {
-    int digit;
-    bool* possible_digit;
+    int digit;              // certainly is one of the digits (1-9)
+    bool* possible_digit;   // array of 9, if digit was not ruled out -> index-1 = 1, else index-1 = 0
 } cell;
 
 typedef struct {
@@ -39,6 +39,7 @@ void init_sudoku(sudoku9x9* s) {
     for (int i = 0; i < 81; i++) {
         s->data[i].possible_digit = malloc(9 * sizeof(bool));
         if (s->data[i].possible_digit == NULL) {
+            // free everything allocated so far
             for (int j = 0; j < i; j++)
                 free(s->data[j].possible_digit);
 
@@ -58,15 +59,15 @@ void destroy_sudoku(sudoku9x9* s) {
 
 void print_sudoku(sudoku9x9* s) {
     for (int i = 0; i < 19; i++)
-        if (i % 6 == 0)
+        if (i % 6 == 0)         // horizontal squares' border
             printf("++===+===+===++===+===+===++===+===+===++\n");
-        else if (i % 2 == 0)
+        else if (i % 2 == 0)    // horizontal border that is inside of the squares
             printf("++---+---+---++---+---+---++---+---+---++\n");
         else {
-            printf("||");
+            printf("||");       // vertical squares' border
             for (int j = 0; j < 9; j++) {
                 printf(" %i |", s->data[j + i/2 * 9].digit);
-                if (j % 3 == 2) printf("|");
+                if (j % 3 == 2) printf("|");    // vertical squares' border
             }
             printf("\n");
         }
